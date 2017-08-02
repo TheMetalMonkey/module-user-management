@@ -7,6 +7,7 @@ namespace webvimark\modules\UserManagement\components;
 
 use webvimark\modules\UserManagement\models\User;
 use yii\helpers\Html;
+use yii;
 
 /**
  * Class GhostHtml
@@ -28,7 +29,10 @@ class GhostHtml extends Html
 		{
 			return parent::a($text, $url, $options);
 		}
-
+		if(is_array($url) && strpos($url[0], '/')===false)
+		{
+			$url[0] = Yii::$app->controller->id . '/' . $url[0];
+		}
 		return User::canRoute($url) ? parent::a($text, $url, $options) : '';
 	}
 }
