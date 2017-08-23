@@ -15,7 +15,7 @@ class UserManagementModule extends \yii\base\Module
 	 *
 	 * @var bool
 	 */
-	public $useEmailAsLogin = false;
+	public $useEmailAsLogin = true;
 
 	/**
 	 * Works only if $useEmailAsLogin = true
@@ -26,7 +26,7 @@ class UserManagementModule extends \yii\base\Module
 	 * @var bool
 	 * @see $useEmailAsLogin
 	 */
-	public $emailConfirmationRequired = false;
+	public $emailConfirmationRequired = true;
 
 	/**
 	 * Params for mailer
@@ -166,7 +166,7 @@ class UserManagementModule extends \yii\base\Module
 	public $captchaOptions = [
 		'class'     => 'yii\captcha\CaptchaAction',
 		'minLength' => 3,
-		'maxLength' => 4,
+		'maxLength' => 3,
 		'offset'    => 5
 	];
 
@@ -283,7 +283,7 @@ class UserManagementModule extends \yii\base\Module
 	{
 		if ( !isset($this->mailerOptions['from']) )
 		{
-			$this->mailerOptions['from'] = [Yii::$app->params['adminEmail'] => Yii::$app->name . ' robot'];
+			$this->mailerOptions['from'] = [Yii::$app->params['supportEmail'] => Yii::$app->name];
 		}
 
 		$this->mailerOptions = ArrayHelper::merge($this->_defaultMailerOptions, $this->mailerOptions);
