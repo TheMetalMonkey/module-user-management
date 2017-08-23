@@ -85,6 +85,7 @@ class ChangeOwnPasswordForm extends Model
 		}
 
 		$this->user->password = $this->password;
+		$this->user->resetAuthKey();
 		$this->user->removeConfirmationToken();
 		return $this->user->save();
 	}

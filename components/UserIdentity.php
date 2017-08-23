@@ -167,6 +167,15 @@ abstract class UserIdentity extends ActiveRecord implements IdentityInterface
 			$this->auth_key = Yii::$app->security->generateRandomString();
 		}
 	}
+	
+	/**
+	 * Resets authentication key
+	 */
+	public function resetAuthKey()
+	{
+		$this->auth_key = null;
+		UserIdentity::generateAuthKey();
+	}
 
 	/**
 	 * Generates new confirmation token
