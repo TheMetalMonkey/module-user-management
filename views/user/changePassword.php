@@ -30,9 +30,15 @@ $this->params['breadcrumbs'][] = UserManagementModule::t('back', 'Changing passw
 
 				<?= $form->field($model, 'password')->passwordInput(['maxlength' => 255, 'autocomplete'=>'off']) ?>
 
-				<?= $form->field($model, 'repeat_password')->passwordInput(['maxlength' => 255, 'autocomplete'=>'off']) ?>
-
-
+				<?= $form->field($model, 'repeat_password')->passwordInput(['maxlength' => 255, 'autocomplete'=>'off',]) ?>
+				
+				<div class="help-text">
+					<div class="col-sm-offset-1 col-sm-20">
+						<?= Html::label('Please choose a secure password with at least 8 characters that contains at least two of the following: lowercase letters, uppercase letters, numbers, and symbols.') ?>
+					<p> </p>
+					</div>
+				</div>
+				
 				<div class="form-group">
 					<div class="col-sm-offset-3 col-sm-9">
 						<?php if ( $model->isNewRecord ): ?>
