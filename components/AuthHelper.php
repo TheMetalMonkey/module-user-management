@@ -94,7 +94,15 @@ class AuthHelper
 	 */
 	public static function getPermissionsLastModFile()
 	{
-		$file = Yii::$app->runtimePath . '/__permissions_last_mod.txt';
+	    if(isset(Yii::$app->params ['permissionLastModPath'])) {
+	       $path = Yii::$app->params ['permissionLastModPath'];
+	    } else {
+	        $path = Yii::$app->permissionLastModPath;
+	    }
+	    
+	    $file = $path . '/__permissions_last_mod.txt';
+	    
+	    //$file = Yii::$app->permissionLastModPath. '/__permissions_last_mod.txt';
 
 		if ( !is_file($file) )
 		{
