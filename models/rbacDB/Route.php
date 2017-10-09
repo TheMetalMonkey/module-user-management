@@ -119,8 +119,31 @@ class Route extends AbstractItem
 	{
 		$allRoutes = AuthHelper::getRoutes();
 
+        $allAppRoutes = [];
+		
+        $appId = '/'.Yii::$app->id;
+		
+		foreach ($allRoutes as $value) {
+		    if(strpos($value, 'debug')>0 || strpos($value, 'gii')>0) {
+		        continue;
+		    }		    
+		    $route = $appId.$value;
+		    $allAppRoutes[$route]=$route;
+		}
+		
+		$allRoutes = $allAppRoutes;
+		
 		$currentRoutes = ArrayHelper::map(Route::find()->asArray()->all(), 'name', 'name');
 
+		$currentRoutesTmp = [];
+		foreach ($currentRoutes as $key=>$value)
+		{
+		    if (0 === strpos($key, $appId)) {
+		        $currentRoutesTmp[$key] = $value;
+		    }
+		}
+		$currentRoutes = $currentRoutesTmp;
+		
 		$toAdd = array_diff(array_keys($allRoutes), array_keys($currentRoutes));
 
 		foreach ($toAdd as $addItem)
@@ -158,6 +181,7 @@ class Route extends AbstractItem
 	 */
 	public static function isRouteAllowed($route, $allowedRoutes)
 	{
+        $route = '/' . Yii::$app->id . $route;
 		if ( in_array($route, $allowedRoutes) )
 		{
 			return true;

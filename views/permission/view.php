@@ -144,24 +144,96 @@ $this->params['breadcrumbs'][] = $this->title;
 
 				<hr/>
 
-				<?= Html::checkboxList(
-					'child_routes',
-					ArrayHelper::map($childRoutes, 'name', 'name'),
-					ArrayHelper::map($routes, 'name', 'name'),
-					[
-						'id'=>'routes-list',
-						'separator'=>'<div class="separator"></div>',
-						'item'=>function($index, $label, $name, $checked, $value) {
-								return Html::checkbox($name, $checked, [
-									'value' => $value,
-									'label' => '<span class="route-text">' . $label . '</span>',
-									'labelOptions'=>['class'=>'route-label'],
-									'class'=>'route-checkbox',
-								]);
-						},
-					]
-				) ?>
+<?php
 
+function showCheckBoxList($selectedRoutes, $displayRoutes) {
+    return Html::checkboxList(
+            'child_routes',
+            $selectedRoutes,
+            $displayRoutes,
+            [
+                    'id'=>'routes-list',
+                    'separator'=>'<div class="separator"></div>',
+                    'item'=>function($index, $label, $name, $checked, $value) {
+                    return Html::checkbox($name, $checked, [
+                            'value' => $value,
+                            'label' => '<span class="route-text">' . $label . '</span>',
+                            'labelOptions'=>['class'=>'route-label'],
+                            'class'=>'route-checkbox',
+                    ]);
+    },
+    ]
+            ); 
+}
+
+if(isset(Yii::$app->params ['app-route-prefixes'])) {
+    $appIds = Yii::$app->params ['app-route-prefixes'];
+} else {
+    $appIds = [];
+}
+
+$routesDisplayed = [];
+
+$selectedRoutes = ArrayHelper::map($childRoutes, 'name', 'name');
+
+// display the global permission separatly
+echo showCheckBoxList($selectedRoutes, ['/*'=>'/*']);
+
+$routesDisplayed[] = '/*';
+
+?>
+				<table class="table table-sm table-responsive" style='background-color: rgb(245, 245, 245);'>
+				<tr>
+				<?php
+				$i=0;
+					foreach ($appIds as $appId) {
+					    $color = $i%2==0?'rgb(245, 245, 245)':'rgb(250, 250, 250)';
+					    $i++;
+					    echo '<th style="background-color: '.$color.'">'.$appId.'</th>';
+					}
+					$color = $i%2==0?'rgb(245, 245, 245)':'rgb(250, 250, 250)';
+					$i++;
+					echo '<th style="background-color: '.$color.'">Other Routes</th>';
+					?>
+				</tr>
+				<tr>
+				
+				<?php
+				$i=0;
+				foreach ($appIds as $appId) {
+    				$filterRoutes = [];
+    				foreach($routes as $value) {
+    				    if (0 === strpos($value['name'], $appId)) {
+    				        $display = substr($value['name'], strlen($appId));
+    				        
+  				            $filterRoutes[$value['name']] = $display;
+    				        
+    				        $routesDisplayed[] = $value['name'];
+    				    }
+    				}
+    				$color = $i%2==0?'rgb(245, 245, 245)':'rgb(250, 250, 250)';
+    				$i++;
+    				echo '<td valign="top" style="background-color: '.$color.'">';
+    				echo showCheckBoxList($selectedRoutes, $filterRoutes);
+    				echo '</td>';
+				}
+				
+				$filterRoutes = [];
+				foreach($routes as $value) {
+				
+				    if(!in_array($value['name'], $routesDisplayed)) {
+				        $filterRoutes[$value['name']] = $value['name'];
+				    }
+				}
+				$color = $i%2==0?'rgb(245, 245, 245)':'rgb(250, 250, 250)';
+				$i++;
+				echo '<td valign="top" style="background-color: '.$color.'">';
+				echo showCheckBoxList($selectedRoutes, $filterRoutes);
+				echo '</td>';
+				
+				?>
+				</tr>
+				</table>
 				<hr/>
 				<?= Html::submitButton(
 					'<span class="glyphicon glyphicon-ok"></span> ' . UserManagementModule::t('back', 'Save'),
