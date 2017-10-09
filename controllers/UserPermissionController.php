@@ -44,6 +44,29 @@ class UserPermissionController extends BaseController
 		return $this->renderIsAjax('set', compact('user', 'permissionsByGroup'));
 	}
 
+	public static function SetRoles($id)
+	{
+	    $oldAssignments = array_keys(Role::getUserRoles($id));
+	    
+	    // To be sure that user didn't attempt to assign himself some unavailable roles
+	    $newAssignments = array_intersect(Role::getAvailableRoles(Yii::$app->user->isSuperAdmin, true), (array)Yii::$app->request->post('roles', []));
+	    
+	    $toAssign = array_diff($newAssignments, $oldAssignments);
+	    $toRevoke = array_diff($oldAssignments, $newAssignments);
+	    
+	    foreach ($toRevoke as $role)
+	    {
+	        User::revokeRole($id, $role);
+	    }
+	    
+	    foreach ($toAssign as $role)
+	    {
+	        User::assignRole($id, $role);
+	    }
+	    
+	    return $toAssign;
+	}
+	
 	/**
 	 * @param int $id - User ID
 	 *
@@ -57,24 +80,8 @@ class UserPermissionController extends BaseController
 			return $this->redirect(['set', 'id'=>$id]);
 		}
 
-		$oldAssignments = array_keys(Role::getUserRoles($id));
-
-		// To be sure that user didn't attempt to assign himself some unavailable roles
-		$newAssignments = array_intersect(Role::getAvailableRoles(Yii::$app->user->isSuperAdmin, true), (array)Yii::$app->request->post('roles', []));
-
-		$toAssign = array_diff($newAssignments, $oldAssignments);
-		$toRevoke = array_diff($oldAssignments, $newAssignments);
-
-		foreach ($toRevoke as $role)
-		{
-			User::revokeRole($id, $role);
-		}
-
-		foreach ($toAssign as $role)
-		{
-			User::assignRole($id, $role);
-		}
-
+		self::SetRoles($id);
+		
 		Yii::$app->session->setFlash('success', UserManagementModule::t('back', 'Saved'));
 
 		return $this->redirect(['set', 'id'=>$id]);
