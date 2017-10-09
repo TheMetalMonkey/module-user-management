@@ -182,6 +182,11 @@ class Route extends AbstractItem
 	public static function isRouteAllowed($route, $allowedRoutes)
 	{
         $route = '/' . Yii::$app->id . $route;
+        //Yii::trace('route '. var_export($route, true).'\r\nallowed '. var_export($allowedRoutes, true));
+	    //Yii::trace();
+//         echo 'route '. var_export($route, true).'\r\nallowed '. var_export($allowedRoutes, true);
+//         die();
+	    
 		if ( in_array($route, $allowedRoutes) )
 		{
 			return true;
