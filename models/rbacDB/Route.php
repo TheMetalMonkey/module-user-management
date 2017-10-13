@@ -275,6 +275,14 @@ class Route extends AbstractItem
 	{
 		$commonRoutes = Yii::$app->cache ? Yii::$app->cache->get('__commonRoutes') : false;
 
+		if(Yii::$app->cache) {
+		  $lastUpdate = Yii::$app->cache->get('__commonRoutes_last_update');
+		  $lastMod = filemtime(AuthHelper::getPermissionsLastModFile());
+		  if ( $lastUpdate != $lastMod) {
+		      $commonRoutes = false;
+		  } 
+		}
+		
 		if ( $commonRoutes === false )
 		{
 			$commonRoutesDB = (new Query())
@@ -286,7 +294,10 @@ class Route extends AbstractItem
 			$commonRoutes = Route::withSubRoutes($commonRoutesDB, ArrayHelper::map(Route::find()->asArray()->all(), 'name', 'name'));
 
 			if ( Yii::$app->cache )
+			{
 				Yii::$app->cache->set('__commonRoutes', $commonRoutes, 3600);
+				Yii::$app->cache->set('__commonRoutes_last_update', $lastMod, 3600);
+			}
 		}
 
 		$currentFullRoute= '/' . Yii::$app->id . $currentFullRoute;
