@@ -237,7 +237,8 @@ class Route extends AbstractItem
 				return true;
 			}
 		}
-
+		
+		/// this is before the app-id has been prepended to the route
 		$systemPages = [
 			'/user-management/auth/logout',
 			AuthHelper::unifyRoute(Yii::$app->errorHandler->errorAction),
@@ -288,6 +289,9 @@ class Route extends AbstractItem
 				Yii::$app->cache->set('__commonRoutes', $commonRoutes, 3600);
 		}
 
+		$currentFullRoute= '/' . Yii::$app->id . $currentFullRoute;
+		
+		
 		return in_array($currentFullRoute, $commonRoutes);
 	}
 }
