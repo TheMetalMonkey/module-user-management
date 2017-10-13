@@ -51,12 +51,29 @@ class PasswordRecoveryForm extends Model
 			return false;
 		}
 
-		$user = User::findOne([
-			'email'           => $this->email,
-			'email_confirmed' => 1,
-			'status'          => User::STATUS_ACTIVE,
-		]);
-
+		if(array_key_exists('requireRole', Yii::$app->params)) {
+		    $requireRole = Yii::$app->params['requireRole'];
+		    
+		    $auth_assignment= Yii::$app->getModule('user-management')->auth_assignment_table;
+		    $user_table = Yii::$app->getModule('user-management')->user_table;
+		    
+		    $query = User::find()->innerJoin($auth_assignment,'('.$auth_assignment.'.user_id = ' . $user_table.'.id )')->where([
+		            'email'           => $this->email,
+		            'email_confirmed' => 1,
+		            'status'          => User::STATUS_ACTIVE,
+		            $auth_assignment.'.item_name'       => $requireRole
+		    ]);
+		    
+		    $user = $query->one();
+		    
+		} else {
+		    $user = User::findOne([
+		            'email'           => $this->email,
+		            'email_confirmed' => 1,
+		            'status'          => User::STATUS_ACTIVE,
+		    ]);
+		}
+		
 		if ( $user )
 		{
 			$this->user = $user;
