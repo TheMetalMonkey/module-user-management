@@ -195,7 +195,7 @@ abstract class AbstractItem extends ActiveRecord
 		{
 			if ( Role::find()->where(['name'=>$this->name])->exists() )
 			{
-				$this->addError('name', Yii::t('yii', '{attribute} "{value}" has already been taken.', [
+				$this->addError('name', Yii::t('yii', '{attribute} "{value}" has already been taken. If you already have an iOn account e.g. PRJL - you may login with the same email and password.', [
 					'attribute' => $this->getAttributeLabel($attribute),
 					'value'     => $this->$attribute,
 				]));
