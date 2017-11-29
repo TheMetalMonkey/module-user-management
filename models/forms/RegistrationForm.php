@@ -28,6 +28,7 @@ class RegistrationForm extends Model
 			['username', 'unique',
 				'targetClass'     => 'webvimark\modules\UserManagement\models\User',
 				'targetAttribute' => 'username',
+			        'message' => 'Email has already been taken. If you already have an iOn account e.g. PRJL - you may login with the same email and password. If you have forgotton your password, go to Account -> Password Recovery.'
 			],
 
 			['username', 'purgeXSS'],
