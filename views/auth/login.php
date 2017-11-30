@@ -31,8 +31,12 @@ use yii\helpers\Html;
 					<?= $form->field($model, 'username')
 						->textInput(['placeholder'=>$model->getAttributeLabel('username'), 'autocomplete'=>'off']) ?>
 
-					<?= $form->field($model, 'password')
-						->passwordInput(['placeholder'=>$model->getAttributeLabel('password'), 'autocomplete'=>'off']) ?>
+					<?= $form->field($model, 'password', ['errorOptions' => [
+						                'encode' => false,
+						        ]])
+						->passwordInput(['placeholder'=>$model->getAttributeLabel('password'), 
+						        'autocomplete'=>'off',
+					]) ?>
 
 					<?= (isset(Yii::$app->user->enableAutoLogin) && Yii::$app->user->enableAutoLogin) ? $form->field($model, 'rememberMe')->checkbox(['value'=>true]) : '' ?>
 

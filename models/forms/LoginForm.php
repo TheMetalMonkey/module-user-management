@@ -56,7 +56,11 @@ class LoginForm extends Model
 			$user = $this->getUser();
 			if ( !$user || !$user->validatePassword($this->password) )
 			{
-				$this->addError('password', UserManagementModule::t('front', 'Incorrect username or password.'));
+			    if(array_key_exists('login_password_error', Yii::$app->params)) {
+			        $this->addError('password', UserManagementModule::t('front', Yii::$app->params['login_password_error']));
+			    } else {
+				    $this->addError('password', UserManagementModule::t('front', 'Incorrect username or password.'));
+			    }
 			}
 		}
 	}
