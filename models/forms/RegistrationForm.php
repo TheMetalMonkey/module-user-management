@@ -24,18 +24,25 @@ class RegistrationForm extends Model
 
 			[['username', 'password', 'repeat_password', 'captcha'], 'required'],
 			[['username', 'password', 'repeat_password'], 'trim'],
-
+			
 			['username', 'unique',
 				'targetClass'     => 'webvimark\modules\UserManagement\models\User',
 				'targetAttribute' => 'username',
 			        'message' => 'Email has already been taken. If you already have an iOn account e.g. PRJL - you may login with the same email and password. If you have forgotton your password, go to Account -> Password Recovery.'
 			],
+				
+			['username', 'email',
+				'checkDNS' => 'true'
+			],
 
 			['username', 'purgeXSS'],
 
 			['password', 'string', 'max' => 255],
-			['password', 'match', 'pattern' => Yii::$app->getModule('user-management')->passwordRegexp],
-
+			['password', 'match', 
+				'pattern' => Yii::$app->getModule('user-management')->passwordRegexp, 
+				'message' => 'Please choose a secure password with at least 8 characters that contains at least two of the following: lowercase letters, uppercase letters, numbers, and symbols.'
+			],
+			
 			['repeat_password', 'compare', 'compareAttribute'=>'password'],
 		];
 

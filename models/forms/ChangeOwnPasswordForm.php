@@ -35,8 +35,10 @@ class ChangeOwnPasswordForm extends Model
 			[['password', 'repeat_password'], 'required'],
 			[['password', 'repeat_password', 'current_password'], 'string', 'max'=>255],
 			[['password', 'repeat_password', 'current_password'], 'trim'],
-			['password', 'match', 'pattern' => Yii::$app->getModule('user-management')->passwordRegexp],
-
+			['password', 'match', 
+				'pattern' => Yii::$app->getModule('user-management')->passwordRegexp,
+				'message' => 'Please choose a secure password with at least 8 characters that contains at least two of the following: lowercase letters, uppercase letters, numbers, and symbols.'
+			],
 			['repeat_password', 'compare', 'compareAttribute'=>'password'],
 
 			['current_password', 'required', 'except'=>'restoreViaEmail'],
