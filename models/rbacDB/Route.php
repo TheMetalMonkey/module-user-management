@@ -3,7 +3,6 @@ namespace webvimark\modules\UserManagement\models\rbacDB;
 
 use webvimark\modules\UserManagement\components\AuthHelper;
 use yii\base\Action;
-use yii\db\Expression;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use Yii;
@@ -151,7 +150,7 @@ class Route extends AbstractItem
 			Route::create($addItem);
 		}
 
-		$toRemove = false;
+		$toRemove = [];
 		if ( $deleteUnusedRoutes )
 		{
 			$toRemove = array_diff(array_keys($currentRoutes), array_keys($allRoutes));
@@ -163,12 +162,14 @@ class Route extends AbstractItem
 		}
 
 
-		if ( $toAdd || $toRemove )
+		if ( count($toAdd) || count($toRemove)>0 )
 		{
 			if (Yii::$app->cache) {
 				Yii::$app->cache->delete('__commonRoutes');
 			}
 		}
+		
+		return ['added'=>$toAdd, 'removed'=>$toRemove];
 	}
 
 	/**
