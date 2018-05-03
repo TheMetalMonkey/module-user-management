@@ -30,10 +30,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<?= $form->field($model, 'repeat_password')->passwordInput(['maxlength' => 255, 'autocomplete'=>'off']) ?>
 
-	<?= $form->field($model, 'captcha')->widget(Captcha::className(), [
-		'template' => '<div class="row"><div class="col-sm-2">{image}</div><div class="col-sm-3">{input}</div></div>',
+    <?= $form->field($model, 'captcha')->widget(
+        \himiklab\yii2\recaptcha\ReCaptcha::className(),
+        ['siteKey' => Yii::$app->params['re-captcha-site-key']]
+    ) ?>
+
+	<?= ''/*$form->field($model, 'captcha')->widget(Captcha::className(), [
+		'template' => '<div class="row"><div class="col-sm-3">{image}</div><div class="col-sm-3">{input}</div></div>',
 		'captchaAction'=>['/user-management/auth/captcha']
-	]) ?>
+	])*/ ?>
 
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-9">

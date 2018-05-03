@@ -20,7 +20,8 @@ class RegistrationForm extends Model
 	public function rules()
 	{
 		$rules = [
-			['captcha', 'captcha', 'captchaAction'=>'/user-management/auth/captcha'],
+			//['captcha', 'captcha', 'captchaAction'=>'/user-management/auth/captcha'],
+		    [['captcha'], \himiklab\yii2\recaptcha\ReCaptchaValidator::className(), 'secret' => Yii::$app->params['re-captcha-secret'], 'uncheckedMessage' => 'Please confirm that you are not a bot.'],
 
 			[['username', 'password', 'repeat_password', 'captcha'], 'required'],
 			[['username', 'password', 'repeat_password'], 'trim'],
