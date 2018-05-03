@@ -32,9 +32,7 @@ class RegistrationForm extends Model
 			        'message' => 'Email has already been taken. If you already have an iOn account e.g. PRJL - you may login with the same email and password. If you have forgotton your password, go to Account -> Password Recovery.'
 			],
 				
-			['username', 'email',
-				'checkDNS' => 'true'
-			],
+			['username', 'email', 'checkDNS' => 'true'],
 
 			['username', 'purgeXSS'],
 
