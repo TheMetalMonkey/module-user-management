@@ -29,11 +29,12 @@ class PasswordRecoveryForm extends Model
 	public function rules()
 	{
 		return [
-			['captcha', 'captcha', 'captchaAction'=>'/user-management/auth/captcha'],
+			//['captcha', 'captcha', 'captchaAction'=>'/user-management/auth/captcha'],
+	        [['captcha'], \himiklab\yii2\recaptcha\ReCaptchaValidator::className(), 'secret' => Yii::$app->params['re-captcha-secret'], 'uncheckedMessage' => 'Please confirm that you are not a bot.'],
 
 			[['email', 'captcha'], 'required'],
 			['email', 'trim'],
-			['email', 'email'],
+	        ['email', 'email', 'checkDNS' => 'true'],
 
 			['email', 'validateEmailConfirmedAndUserActive'],
 		];
