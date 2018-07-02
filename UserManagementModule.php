@@ -71,6 +71,12 @@ class UserManagementModule extends \yii\base\Module
 	public $registrationFormClass = 'webvimark\modules\UserManagement\models\forms\RegistrationForm';
 
 	/**
+	 * You can define your own registration form view here
+	 * @var string
+	 */
+	public $registrationFormView = 'registration';
+	
+	/**
 	 * After how many seconds confirmation token will be invalid
 	 *
 	 * @var int

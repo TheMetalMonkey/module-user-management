@@ -171,8 +171,8 @@ class AuthController extends BaseController
 			}
 
 		}
-
-		return $this->renderIsAjax('registration', compact('model'));
+		$view = $this->module->registrationFormView;
+		return $this->renderIsAjax($view, compact('model'));
 	}
 
 
