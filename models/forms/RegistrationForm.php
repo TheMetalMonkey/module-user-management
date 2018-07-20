@@ -10,6 +10,7 @@ use yii\helpers\Html;
 class RegistrationForm extends Model
 {
 	public $username;
+	public $repeat_username;
 	public $password;
 	public $repeat_password;
 	public $captcha;
@@ -50,6 +51,15 @@ class RegistrationForm extends Model
 			
 			['repeat_password', 'compare', 'compareAttribute'=>'password'],
 		];
+		
+		if ( Yii::$app->getModule('user-management')->emailConfirmationRequired == false)
+		{
+			$rules = [
+					['repeat_username', 'required'],
+					['repeat_username', 'trim'],
+					['repeat_username', 'compare', 'compareAttribute'=>'username'],
+			];
+		}
 
 		if ( Yii::$app->getModule('user-management')->useEmailAsLogin )
 		{
@@ -83,6 +93,7 @@ class RegistrationForm extends Model
 	{
 		return [
 			'username'        => Yii::$app->getModule('user-management')->useEmailAsLogin ? 'E-mail' : UserManagementModule::t('front', 'Login'),
+			'repeat_username' => UserManagementModule::t('front', 'Repeat email'),
 			'password'        => UserManagementModule::t('front', 'Password'),
 			'repeat_password' => UserManagementModule::t('front', 'Repeat password'),
 			'captcha'         => UserManagementModule::t('front', 'Captcha'),
