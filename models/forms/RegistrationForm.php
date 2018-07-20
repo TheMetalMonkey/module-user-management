@@ -54,11 +54,9 @@ class RegistrationForm extends Model
 		
 		if ( Yii::$app->getModule('user-management')->emailConfirmationRequired == false)
 		{
-			$rules = [
-					['repeat_username', 'required'],
-					['repeat_username', 'trim'],
-					['repeat_username', 'compare', 'compareAttribute'=>'username'],
-			];
+			$rules[] = ['repeat_username', 'required'];
+			$rules[] = ['repeat_username', 'trim'];
+			$rules[] = ['repeat_username', 'compare', 'compareAttribute'=>'username'];
 		}
 
 		if ( Yii::$app->getModule('user-management')->useEmailAsLogin )
